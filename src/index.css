@@ -1,0 +1,362 @@
+@import "tailwindcss";
+
+/* ============================================
+   DESIGN TOKENS - Global font, spacing, colors
+   ============================================ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --spacing-page: 1rem;
+  --spacing-section: 1.5rem;
+  --spacing-card: 1.25rem;
+  --spacing-touch: 2.75rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* ============================================
+   EGGPLORE PALETTE – single colors, no gradients
+   Primary: #BE52F2 #DBA5F5 #EEDFF2
+   Accent:  #6979F8 #A5AFFB #E5E7FA
+   Neutral: #1A051D #3F3356 #D0C9D6 #ECE9F1 #F7F5F9 #FFFFFF
+   Semantic: Yellow #FFCF5C Orange #FFA26B Blue #0084F4 Green #00C48C Pink #FF647C
+   ============================================ */
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F7F5F9;
+  --bg-tertiary: #ECE9F1;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --text-primary: #1A051D;
+  --text-secondary: #3F3356;
+  --text-muted: #D0C9D6;
+  --border-default: #ECE9F1;
+  --border-strong: #D0C9D6;
+  --color-primary: #BE52F2;
+  --color-primary-hover: #DBA5F5;
+  --color-primary-muted: #EEDFF2;
+  --color-accent: #6979F8;
+  --color-accent-hover: #A5AFFB;
+  --color-accent-muted: #E5E7FA;
+  --color-success: #00C48C;
+  --color-warning: #FFCF5C;
+  --color-error: #FF647C;
+  --shadow-sm: 0 1px 2px rgba(26, 5, 29, 0.06);
+  --shadow-md: 0 4px 12px rgba(26, 5, 29, 0.08);
+  --shadow-lg: 0 12px 24px rgba(26, 5, 29, 0.1);
+  --input-bg: #FFFFFF;
+  --input-border: #ECE9F1;
+  --input-focus-border: #6979F8;
+  --input-focus-ring: #E5E7FA;
+  --label-color: #3F3356;
+  --link-color: #6979F8;
+  --link-hover: #A5AFFB;
+  --radius-input: 0.5rem;
+  --font-size-label: 0.875rem;
+  --font-weight-label: 500;
+  /* Login – light */
+  --login-bg: #FFFFFF;
+  --login-surface: #F7F5F9;
+  --login-text: #1A051D;
+  --login-muted: #3F3356;
+  --login-primary: #BE52F2;
+  --login-primary-hover: #DBA5F5;
+  --login-accent: #6979F8;
+  --login-accent-hover: #A5AFFB;
+  --login-border: #ECE9F1;
+  --login-icon: #6979F8;
+  --login-icon-muted: #D0C9D6;
+}
+
+.dark {
+  --bg-primary: #1A051D;
+  --bg-secondary: #3F3356;
+  --bg-tertiary: #3F3356;
+  --bg-card: #3F3356;
+  --bg-elevated: #3F3356;
+  --text-primary: #F7F5F9;
+  --text-secondary: #ECE9F1;
+  --text-muted: #D0C9D6;
+  --border-default: #3F3356;
+  --border-strong: #D0C9D6;
+  --color-primary: #DBA5F5;
+  --color-primary-hover: #BE52F2;
+  --color-primary-muted: #EEDFF2;
+  --color-accent: #A5AFFB;
+  --color-accent-hover: #E5E7FA;
+  --color-accent-muted: #6979F8;
+  --color-success: #7DDFC3;
+  --color-warning: #FFE29D;
+  --color-error: #FDAFBB;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.3);
+  --input-bg: #3F3356;
+  --input-border: #3F3356;
+  --input-focus-border: #A5AFFB;
+  --input-focus-ring: #3F3356;
+  --label-color: #ECE9F1;
+  --link-color: #A5AFFB;
+  --link-hover: #E5E7FA;
+  /* Login – dark */
+  --login-bg: #3F3356;
+  --login-surface: #1A051D;
+  --login-text: #F7F5F9;
+  --login-muted: #D0C9D6;
+  --login-primary: #DBA5F5;
+  --login-primary-hover: #BE52F2;
+  --login-accent: #A5AFFB;
+  --login-accent-hover: #E5E7FA;
+  --login-border: #3F3356;
+  --login-icon: #A5AFFB;
+  --login-icon-muted: #D0C9D6;
+}
+
+/* ============================================
+   BASE - ensure our styles apply after Tailwind
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  min-height: 100dvh;
+  min-height: 100vh;
+}
+
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Auth form inputs - use global tokens */
+.auth-input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-input);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.auth-input::placeholder {
+  color: var(--text-muted);
+}
+.auth-input:hover {
+  border-color: var(--border-strong);
+}
+.auth-input:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 3px var(--input-focus-ring);
+  outline: none;
+}
+.auth-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.auth-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-label);
+  color: var(--label-color);
+}
+.auth-link {
+  color: var(--link-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+.auth-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+.auth-btn-primary {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-input);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.auth-btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+.auth-btn-primary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.auth-btn-secondary {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-input);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.auth-btn-secondary:hover {
+  background-color: var(--border-default);
+  border-color: var(--border-strong);
+}
+
+/* Login page – no scroll, EGGPLORE palette, solid colors only, responsive */
+.login-page {
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--login-surface);
+}
+.login-glass-card {
+  position: relative;
+  background-color: var(--login-bg);
+  border: 1px solid var(--login-border);
+  box-shadow: var(--shadow-lg);
+}
+.login-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  background-color: var(--login-bg);
+  border: 1px solid var(--login-border);
+  border-radius: var(--radius-input);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.login-input-wrap:hover {
+  border-color: var(--border-strong);
+}
+.login-input-wrap:focus-within {
+  border-color: var(--login-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-muted);
+  outline: none;
+}
+.login-input-wrap input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--login-text);
+}
+.login-input-wrap input::placeholder {
+  color: var(--login-muted);
+}
+.login-input-wrap input:focus {
+  outline: none;
+}
+.login-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--login-muted);
+}
+.login-input-icon {
+  flex-shrink: 0;
+  color: var(--login-icon);
+  font-size: 0.875rem;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.login-header-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.login-eye-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+/* Button – primary purple, hover = lighter shade (EGGPLORE) */
+.login-btn-primary {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  background-color: var(--login-primary);
+  border: none;
+  border-radius: var(--radius-input);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.login-btn-primary:hover {
+  background-color: var(--login-primary-hover);
+  box-shadow: var(--shadow-md);
+}
+.login-btn-primary:focus-visible {
+  outline: 2px solid var(--login-primary);
+  outline-offset: 2px;
+}
+.login-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.dark .login-glass-card {
+  background-color: var(--login-bg);
+  border-color: var(--login-border);
+  box-shadow: var(--shadow-lg);
+}
+.dark .login-btn-primary {
+  background-color: var(--login-primary);
+  color: #1A051D;
+}
+.dark .login-btn-primary:hover {
+  background-color: var(--login-primary-hover);
+  color: #1A051D;
+}
+/* Responsive: smaller on very small screens */
+@media (max-width: 360px) {
+  .login-glass-card {
+    padding: 0.75rem 1rem;
+  }
+  .login-input-wrap {
+    padding: 0.4rem 0.5rem;
+  }
+  .login-input-wrap input {
+    font-size: 0.8125rem;
+  }
+}
