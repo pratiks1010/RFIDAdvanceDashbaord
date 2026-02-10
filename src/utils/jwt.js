@@ -23,3 +23,12 @@ export function getClientCodeFromToken(token) {
   if (!payload) return null
   return payload.ClientCode ?? payload.clientCode ?? payload.client_code ?? null
 }
+
+/**
+ * Get login/username from JWT payload (tries LoginName, loginName, username, sub).
+ */
+export function getLoginNameFromToken(token) {
+  const payload = parseJwt(token)
+  if (!payload) return null
+  return payload.LoginName ?? payload.loginName ?? payload.username ?? payload.sub ?? null
+}

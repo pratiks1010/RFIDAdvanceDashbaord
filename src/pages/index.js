@@ -1,3 +1,5 @@
 export { Login } from './Login'
 export { Register } from './Register'
 export { Dashboard } from './Dashboard'
+export { DashboardHome } from './DashboardHome'
+export { DashboardPlaceholder } from './DashboardPlaceholder'

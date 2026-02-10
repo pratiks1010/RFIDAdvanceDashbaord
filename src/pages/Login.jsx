@@ -32,7 +32,7 @@ export function Login() {
       if (res.ok) {
         const token = data?.token ?? data?.Token
         if (token) setAuth(token, data?.user ?? data)
-        navigate('/')
+        navigate('/', { replace: true })
         return
       }
       setError(data?.message || data?.error || `Login failed (${res.status}). Please try again.`)

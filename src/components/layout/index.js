@@ -1,3 +1,6 @@
 export { Container } from './Container'
 export { PageLayout } from './PageLayout'
 export { AuthLayout } from './AuthLayout'
+export { DashboardLayout } from './DashboardLayout'
+export { DashboardSidebar } from './DashboardSidebar'
+export { DashboardHeader } from './DashboardHeader'
