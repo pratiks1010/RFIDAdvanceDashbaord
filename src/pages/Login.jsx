@@ -3,10 +3,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
 import { HiOutlineArrowRight } from 'react-icons/hi'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { useLoading } from '@/context/LoadingContext'
+import { useAuth } from '@/context/AuthContext'
 import { authLogin } from '@/api/auth'
 
 export function Login() {
   const navigate = useNavigate()
+  const { setLoading: setGlobalLoading } = useLoading()
+  const { setAuth } = useAuth()
   const [loginName, setLoginName] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -17,17 +21,17 @@ export function Login() {
     e.preventDefault()
     setError('')
     if (!loginName.trim() || !password) {
-      setError('Please enter email and password.')
+      setError('Please enter username and password.')
       return
     }
     setLoading(true)
+    setGlobalLoading(true)
     try {
       const res = await authLogin({ LoginName: loginName.trim(), Password: password })
       const data = await res.json().catch(() => ({}))
       if (res.ok) {
-        // Store token or user if API returns it
-        if (data?.token) localStorage.setItem('auth_token', data.token)
-        if (data?.user) localStorage.setItem('auth_user', JSON.stringify(data.user))
+        const token = data?.token ?? data?.Token
+        if (token) setAuth(token, data?.user ?? data)
         navigate('/')
         return
       }
@@ -36,43 +40,45 @@ export function Login() {
       setError(err?.message || 'Network error. Please try again.')
     } finally {
       setLoading(false)
+      setGlobalLoading(false)
     }
   }
 
   return (
     <div className="login-page flex flex-col relative h-dvh max-h-dvh overflow-hidden">
-      <header className="flex items-center justify-between px-3 py-2 sm:px-4 sm:py-3 relative z-10 shrink-0">
-        <Link to="/" className="flex items-center gap-1.5 text-[var(--login-text)] font-semibold text-sm sm:text-base">
-          <span className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[var(--login-text)] text-[var(--login-bg)] text-xs sm:text-sm font-bold">
-            R
-          </span>
-          RFID Dashboard
+      <header className="login-header">
+        <Link to="/" className="flex items-center min-w-0">
+          <img
+            src="/assets/logo/Vector.png"
+            alt="Sparkle RFID"
+            className="login-header-logo"
+          />
         </Link>
         <ThemeToggle />
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-3 py-2 sm:px-4 sm:py-4 relative z-10 min-h-0 overflow-hidden">
-        <div className="w-full max-w-[24rem]">
-          <div className="login-glass-card rounded-xl p-4 sm:p-5">
+      <main className="login-main">
+        <div className="login-card-wrap">
+          <div className="login-glass-card">
             <div className="flex justify-center mb-2 sm:mb-3">
               <span className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[var(--login-primary)] text-white">
                 <HiOutlineArrowRight className="login-header-icon" aria-hidden />
               </span>
             </div>
-            <h1 className="text-base font-bold text-[var(--login-text)] text-center sm:text-lg">
-              Sign in with email
+            <h1 className="text-base font-bold text-[var(--login-text)] text-center sm:text-lg md:text-xl">
+              Sign in with username
             </h1>
-            <p className="mt-0.5 text-xs text-[var(--login-muted)] text-center sm:text-sm">
+            <p className="mt-0.5 text-xs text-[var(--login-muted)] text-center sm:text-sm login-subtitle">
               Enter your credentials to access the RFID Dashboard.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-3 sm:mt-4" noValidate>
-              <label className="login-label">Email</label>
+            <form onSubmit={handleSubmit} className="mt-3 sm:mt-4 md:mt-5" noValidate>
+              <label className="login-label">Username</label>
               <div className="login-input-wrap mt-0.5 mb-2 sm:mb-3">
                 <FiMail className="login-input-icon" aria-hidden />
                 <input
                   type="text"
-                  placeholder="Email or username"
+                  placeholder="Enter username"
                   value={loginName}
                   onChange={(e) => setLoginName(e.target.value)}
                   autoComplete="username"
@@ -81,7 +87,7 @@ export function Login() {
               </div>
 
               <label className="login-label">Password</label>
-              <div className="login-input-wrap mt-0.5 mb-1">
+              <div className="login-input-wrap mt-0.5 mb-4 sm:mb-5">
                 <FiLock className="login-input-icon" aria-hidden />
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -94,30 +100,25 @@ export function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="p-0.5 text-[var(--login-muted)] hover:text-[var(--login-text)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--login-primary)] rounded"
+                  className="p-0.5 text-[var(--login-icon-muted)] hover:text-[var(--login-icon)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--login-accent)] rounded"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <FiEyeOff className="login-eye-icon" /> : <FiEye className="login-eye-icon" />}
                 </button>
               </div>
-              <div className="flex justify-end mb-2">
-                <Link to="/forgot-password" className="auth-link text-xs sm:text-sm">
-                  Forgot password?
-                </Link>
-              </div>
 
               {error && (
-                <p className="mb-2 text-xs text-[var(--color-error)]" role="alert">
+                <p className="mb-3 text-xs text-[var(--color-error)]" role="alert">
                   {error}
                 </p>
               )}
 
-              <button type="submit" className="login-btn-primary" disabled={loading}>
+              <button type="submit" className="login-btn-primary mt-1" disabled={loading}>
                 {loading ? 'Signing in…' : 'Get Started'}
               </button>
             </form>
 
-            <p className="mt-3 sm:mt-4 text-center text-xs text-[var(--login-muted)]">
+            <p className="mt-3 sm:mt-4 md:mt-5 text-center text-xs sm:text-sm text-[var(--login-muted)]">
               Don&apos;t have an account?{' '}
               <Link to="/register" className="auth-link">
                 Create an account
@@ -126,6 +127,20 @@ export function Login() {
           </div>
         </div>
       </main>
+
+      <footer className="login-footer shrink-0">
+        <div className="login-footer-inner">
+          <img
+            src="/assets/logo/logo.png"
+            alt="Loyal String International"
+            className="login-footer-logo"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+          <p className="login-footer-text">
+            © {new Date().getFullYear()} All rights reserved. Loyal String International Pvt. Ltd.
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }

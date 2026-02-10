@@ -1,7 +1,16 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PageLayout } from '@/components/layout/PageLayout'
+import { useAuth } from '@/context/AuthContext'
 
 export function Dashboard() {
+  const navigate = useNavigate()
+  const { logout } = useAuth()
+
+  function handleSignOut() {
+    logout()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <PageLayout title="RFID Dashboard">
       <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 shadow-sm sm:p-6">
@@ -11,9 +20,13 @@ export function Dashboard() {
         <p className="mb-4 text-[var(--text-secondary)]">
           This layout is responsive for mobile, tablet, and desktop with light/dark theme support.
         </p>
-        <Link to="/login" className="auth-link text-sm">
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="auth-link text-sm bg-transparent border-none cursor-pointer font-inherit p-0"
+        >
           Sign out
-        </Link>
+        </button>
       </div>
     </PageLayout>
   )
